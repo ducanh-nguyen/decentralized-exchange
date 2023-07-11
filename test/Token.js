@@ -9,12 +9,15 @@ const tokens = (n) => {
 }
 
 describe("Token", () => {
-	let token
+	let token, accounts, deployer
 
 	beforeEach(async () => {
 		//Fetch Token from Blockchain
 		const Token = await ethers.getContractFactory("Token")
 		token = await Token.deploy('Duck Token', 'DUCK', '1000000')
+
+		accounts = await ethers.getSigners()
+		deployer = accounts[0]
 	})
 
 describe("Deployment", () => {
@@ -34,14 +37,22 @@ describe("Deployment", () => {
 	})
 
 	it("Has correct decimals", async () => {
-		//Check Symbol Name is Correct
+		//Check Decimals is Correct
 		expect(await token.decimals()).to.equal(decimals)
 	})
 
 	it("Has correct total supply", async () => {
-		//Check totalSupply Name is Correct
+		//Check totalSupply is Correct
 		expect(await token.totalSupply()).to.equal(totalSupply)
+	})
+
+	it("Assigns totalSupply to deployer", async () => {
+		//Check totalSupply to deployer
+		expect(await token.balanceOf(deployer.address)).to.equal(totalSupply)
 	})
 })
 
 })
+
+
+
