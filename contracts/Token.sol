@@ -17,6 +17,12 @@ contract Token {
 		uint256 value
 	);
 
+	event Approval(
+		address indexed owner,
+        address indexed spender,
+        uint256 value
+	);
+
 	constructor(
 		string memory _name,
 		string memory _symbol,
@@ -45,8 +51,11 @@ contract Token {
 	}
 
 	function approve(address _spender, uint256 _value)
-	public return(bool success)
+	public returns(bool success)
 	{
-		allowance[msg.sender][_spender] = _value
+		require(_spender != address(0));
+		allowance[msg.sender][_spender] = _value;
+		emit Approval(msg.sender, _spender, _value);
+		return true;
 	}
 }
