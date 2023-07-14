@@ -9,7 +9,7 @@ const tokens = (n) => {
 }
 
 describe("Token", () => {
-	let token, accounts, deployer, receiver
+	let token, accounts, deployer, receiver, exchange
 
 	beforeEach(async () => {
 		//Fetch Token from Blockchain
@@ -18,6 +18,7 @@ describe("Token", () => {
 		accounts = await ethers.getSigners()
 		deployer = accounts[0]
 		receiver = accounts[1]
+		exchange = accounts[2]
 	})
 
 describe("Deployment", () => {
@@ -94,4 +95,24 @@ describe('Sending Tokens', () => {
 			})
 		})
 	})
+
+describe('Approving tokens', () => {
+	let amount, transaction, result
+
+	beforeEach(async () => {
+		amount = tokens(100)
+		transaction = await token.connect(deployer).approve(exchange.address, amount)
+		result = await transaction.wait()
+
+	})
+	describe('Success'), () => {
+		it('Allocates allowance for delegated token spending', async() => {
+			expect(await token.allowance(deployer.address, exchange.address).to.equal(amount)
+		})
+	}
+
+	describe('Failure'), () => {
+		
+	}
+})
 })
